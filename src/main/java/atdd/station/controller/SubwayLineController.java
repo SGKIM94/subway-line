@@ -7,16 +7,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import java.net.URI;
 
 @RestController
 @RequestMapping(value = "/subway-lines",
         produces = "application/json")
 public class SubwayLineController {
-
-    @Resource(name = "subwayLineService")
     private SubwayLineService subwayLineService;
+
+    public SubwayLineController(SubwayLineService subwayLineService) {
+        this.subwayLineService = subwayLineService;
+    }
+
 
     @PostMapping("/")
     public ResponseEntity<SubwayLineCreateResponseDto> create(@RequestBody SubwayLineCreateRequestDto subwayLine) {
@@ -36,7 +38,7 @@ public class SubwayLineController {
         return new ResponseEntity<>(subwayLine, HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
+    @PostMapping("/{id}/subways")
     public ResponseEntity<SubwayLine> update(@PathVariable int id, @RequestBody SubwayLineUpdateRequestDto stations) {
         SubwayLine updatedSubwayLine = subwayLineService.update(id, stations);
         return new ResponseEntity<>(updatedSubwayLine, HttpStatus.OK);
@@ -48,9 +50,9 @@ public class SubwayLineController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}/{name}")
-    public ResponseEntity<Void> deleteStation(@PathVariable int id, @PathVariable String name) {
-        subwayLineService.deleteStation(id, name);
+    @DeleteMapping("/{subwayLineId}/stations/{stationName}")
+    public ResponseEntity<Void> deleteStation(@PathVariable int subwayLineId, @PathVariable String stationName) {
+        subwayLineService.deleteStation(subwayLineId, stationName);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
