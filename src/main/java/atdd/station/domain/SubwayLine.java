@@ -8,6 +8,7 @@ import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Entity
 public class SubwayLine {
@@ -35,6 +36,9 @@ public class SubwayLine {
     @Where(clause = "deleted = false")
     @OrderBy("id ASC")
     private List<Subway> subways = new ArrayList<>();
+
+    @Embedded
+    private Edges edges;
 
     private boolean deleted = false;
 
@@ -88,6 +92,10 @@ public class SubwayLine {
 
     public List<Subway> getSubways() {
         return this.subways;
+    }
+
+    public Stream<Edge> getEdgesStream() {
+        return this.edges.getEdges().stream();
     }
 
     public List<Station> getStations() {
