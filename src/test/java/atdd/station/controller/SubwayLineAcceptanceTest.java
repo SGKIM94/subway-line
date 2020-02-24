@@ -1,6 +1,5 @@
 package atdd.station.controller;
 
-import atdd.station.AbstractAcceptanceTest;
 import atdd.station.domain.SubwayLine;
 import atdd.station.dto.subwayLine.SubwayLineDetailResponseDto;
 import atdd.station.dto.subwayLine.SubwayLineListResponseDto;
@@ -21,13 +20,14 @@ import static atdd.station.fixture.StationFixture.YUCKSAM_STATION_NAME;
 import static atdd.station.fixture.SubwayLineFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SubwayLineAcceptanceTest extends AbstractAcceptanceTest {
+public class SubwayLineAcceptanceTest extends atdd.path.AbstractAcceptanceTest {
     private static final String SUBWAY_LINE_API_BASE_URL = "/subway-lines/";
 
     private RestWebClientTest restWebClientTest;
 
     @BeforeEach
     void setUp() {
+        cleanAllDatabases();
         this.restWebClientTest = new RestWebClientTest(this.webTestClient);
     }
 
