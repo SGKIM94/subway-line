@@ -1,6 +1,5 @@
 package atdd.station.controller;
 
-import atdd.station.AbstractAcceptanceTest;
 import atdd.station.domain.Station;
 import atdd.station.dto.station.StationDetailResponseDto;
 import atdd.station.dto.station.StationListResponseDto;
@@ -21,7 +20,7 @@ import java.util.Objects;
 import static atdd.station.fixture.StationFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class StationAcceptanceTest extends AbstractAcceptanceTest {
+public class StationAcceptanceTest extends atdd.path.AbstractAcceptanceTest {
     private static final Logger logger = LoggerFactory.getLogger(StationAcceptanceTest.class);
 
     public static final String KANGNAM_STATION_JSON = "{\"name\": \"" + KANGNAM_STATION_NAME + "\"}";
@@ -31,6 +30,7 @@ public class StationAcceptanceTest extends AbstractAcceptanceTest {
 
     @BeforeEach
     void setUp() {
+        cleanAllDatabases();
         this.restWebClientTest = new RestWebClientTest(this.webTestClient);
     }
 
