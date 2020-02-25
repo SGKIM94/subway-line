@@ -13,6 +13,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import static atdd.path.TestConstant.STATION_NAME;
 import static atdd.path.TestConstant.TEST_STATION;
 import static atdd.path.fixture.FavoriteFixture.NEW_FAVORITE;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
