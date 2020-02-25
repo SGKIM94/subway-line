@@ -15,8 +15,8 @@ import static org.springframework.data.crossstore.ChangeSetPersister.ID_KEY;
 @NoArgsConstructor
 public class FindByEmailResponseView {
     private static final int FIRST_INDEX = 0;
-    private static final String EMAIL_KEY = "email";
-    private static final String NAME_KEY = "name";
+    public static final String EMAIL_KEY = "email";
+    public static final String NAME_KEY = "name";
     private Long id;
     private String email;
     private String name;
