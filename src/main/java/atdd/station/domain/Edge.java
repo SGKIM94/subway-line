@@ -1,45 +1,45 @@
-package atdd.station.domain;
+package atdd.path.domain;
 
-import lombok.Builder;
+import atdd.station.domain.Station;
 
-import javax.persistence.*;
-
-@Entity
-public class Edge {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
-    @OneToOne
-    @JoinColumn(name = "station_id")
+public class Edge extends atdd.path.domain.Item {
+    private Long id;
     private Station sourceStation;
-
-    @OneToOne
-    @JoinColumn(name = "station_id")
     private Station targetStation;
-
     private int distance;
 
     public Edge() {
     }
 
-    @Builder
-    public Edge(Station sourceStation, Station targetStation, int distance) {
+    public Edge(Long id, Station sourceStation, Station targetStation, int distance) {
+        this.id = id;
         this.sourceStation = sourceStation;
         this.targetStation = targetStation;
         this.distance = distance;
     }
 
-    public long getId() {
+    public static Edge of(Station sourceStation, Station targetStation, int distance) {
+        return new Edge(null, sourceStation, targetStation, distance);
+    }
+
+    public boolean isSameNameWithSourceAndTarget() {
+        return getSourceStationName().equals(getTargetStationName());
+    }
+
+    private String getTargetStationName() {
+        return targetStation.getName();
+    }
+
+    private String getSourceStationName() {
+        return sourceStation.getName();
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public long getSourceStationId() {
-        return sourceStation.getId();
-    }
-
-    public long getTargetStationId() {
-        return targetStation.getId();
+    public int getDistance() {
+        return distance;
     }
 
     public Station getSourceStation() {
@@ -50,7 +50,7 @@ public class Edge {
         return targetStation;
     }
 
-    public int getDistance() {
-        return distance;
+    public boolean hasStation(Station station) {
+        return sourceStation.equals(station) || targetStation.equals(station);
     }
 }
