@@ -29,7 +29,7 @@ public class FavoriteService {
     }
 
     @Transactional(readOnly = true)
-    public FavoriteListResponseView findByUser(User loginUser, String type) {
+F    public FavoriteListResponseView findByUser(User loginUser, String type) {
         return FavoriteListResponseView.toDtoEntity(findStationByUserAndType(loginUser, type));
     }
 
