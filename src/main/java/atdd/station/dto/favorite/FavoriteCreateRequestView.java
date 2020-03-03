@@ -1,7 +1,7 @@
-package atdd.station.dto.favorite;
+package atdd.path.application.dto.favorite;
 
 import atdd.path.domain.Favorite;
-import atdd.path.domain.Station;
+import atdd.path.domain.Item;
 import atdd.path.domain.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,23 +11,19 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 public class FavoriteCreateRequestView {
-    private Long userId;
-    private Long subwayId;
-    private String subwayName;
+    private Item item;
     private String type;
 
     @Builder
-    public FavoriteCreateRequestView(Long userId, Long subwayId, String subwayName, String type) {
-        this.userId = userId;
-        this.subwayId = subwayId;
-        this.subwayName = subwayName;
+    public FavoriteCreateRequestView(Item item, String type) {
+        this.item = item;
         this.type = type;
     }
 
     public Favorite toEntity(User user) {
         return Favorite.builder()
                 .user(user)
-                .subway(new Station(subwayId, subwayName))
+                .item(item)
                 .build();
     }
 }
