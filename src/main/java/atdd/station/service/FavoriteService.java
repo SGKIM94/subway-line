@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static atdd.path.dao.FavoriteDao.EDGE_TYPE;
 import static atdd.path.dao.FavoriteDao.STATION_TYPE;
 
 @Service
@@ -23,13 +24,15 @@ public class FavoriteService {
 
     @Transactional
     public FavoriteCreateResponseView save(User loginUser, FavoriteCreateRequestView favorite) {
-        favorite.getItem()
-                .checkSourceAndTargetStationIsSameWhenEdge(favorite.getType());
+        if (EDGE_TYPE.equals(favorite.getType())) {
+            favorite.getEdge().validateFavoriteEdge();
+        }
+
         return FavoriteCreateResponseView.toDtoEntity(favoriteDao.save(favorite.toEntity(loginUser), favorite.getType()));
     }
 
     @Transactional(readOnly = true)
-F    public FavoriteListResponseView findByUser(User loginUser, String type) {
+    public FavoriteListResponseView findByUser(User loginUser, String type) {
         return FavoriteListResponseView.toDtoEntity(findStationByUserAndType(loginUser, type));
     }
 
