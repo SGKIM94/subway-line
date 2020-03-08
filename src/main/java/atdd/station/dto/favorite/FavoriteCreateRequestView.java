@@ -16,13 +16,17 @@ public class FavoriteCreateRequestView {
 
     public FavoriteCreateRequestView(atdd.path.domain.Item item, String type) {
         this.item = item;
+        setItemByType(item, type);
+        this.type = type;
+    }
+
+    private void setItemByType(atdd.path.domain.Item item, String type) {
         if (EDGE_TYPE.equals(type)) {
             this.edge = (atdd.path.domain.Edge) item;
-        } else {
-            this.station = (Station) item;
+            return;
         }
 
-        this.type = type;
+        this.station = (Station) item;
     }
 
     public Favorite toEntity(atdd.path.domain.User user) {
