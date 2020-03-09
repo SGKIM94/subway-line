@@ -3,6 +3,7 @@ package atdd.station.domain;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Embeddable
@@ -30,4 +31,26 @@ public class Edges {
     public List<Edge> getEdges() {
         return edges;
     }
+
+    private List<Station> getStations(List<atdd.path.domain.Edge> edges) {
+        if (edges.size() == 0) {
+            return new ArrayList<>();
+        }
+
+        List<Station> stations = new ArrayList();
+        Station lastStation = findFirstStation(edges);
+        stations.add(lastStation);
+
+        while (true) {
+            Station nextStation = findNextStationOf(edges, lastStation);
+            if (nextStation == null) {
+                break;
+            }
+            stations.add(nextStation);
+            lastStation = nextStation;
+        }
+
+        return stations;
+    }
+
 }
