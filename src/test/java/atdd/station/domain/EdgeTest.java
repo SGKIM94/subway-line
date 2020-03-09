@@ -31,9 +31,9 @@ public class EdgeTest extends SoftAssertionTest {
     @DisplayName("시작역과 종착역이 같을 때 연결되어 있지 않을 때 예외를 처리하는지")
     @Test
     public void cannotFavoriteEdgeWhenNotConnectSourceWithTarget() {
-        atdd.path.domain.Edge favoriteEdge = new atdd.path.domain.Edge(EDGE_ID_15, TEST_STATION_2, TEST_STATION_17, 10);
+        atdd.path.domain.Edge favoriteEdge = new atdd.path.domain.Edge(EDGE_ID_15, TEST_STATION_WITH_LINE, TEST_STATION_17_WITH_LINE, 10);
         Assertions.assertThrows(IllegalArgumentException.class,
-                favoriteEdge::checkConnectSourceAndTarget);
+                favoriteEdge::checkBidirectionalSourceAndTarget);
     }
 }
 
