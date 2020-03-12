@@ -1,7 +1,6 @@
 package atdd.station.security;
 
-import atdd.path.SoftAssertionTest;
-import atdd.path.dao.UserDao;
+import atdd.station.domain.UserRepository;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,29 +10,29 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockHttpServletRequest;
 
-import static atdd.path.fixture.UserFixture.*;
-import static atdd.path.security.JwtAuthInterceptor.AUTH_USER_KEY;
+import static atdd.station.fixture.UserFixture.*;
+import static atdd.station.security.JwtAuthInterceptor.AUTH_USER_KEY;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-public class JwtAuthInterceptorTest extends SoftAssertionTest {
+public class JwtAuthInterceptorTest {
     private JwtAuthInterceptor jwtAuthInterceptor;
     private TokenAuthenticationService tokenAuthenticationService;
 
     @MockBean
-    private UserDao userDao;
+    private UserRepository userRepository;
 
     @BeforeEach
     void setUp() {
         this.tokenAuthenticationService = new TokenAuthenticationService();
-        this.jwtAuthInterceptor = new JwtAuthInterceptor(tokenAuthenticationService, userDao);
+        this.jwtAuthInterceptor = new JwtAuthInterceptor(tokenAuthenticationService, userRepository);
     }
 
     @DisplayName("사용자 로그인 시 토큰 검증을 진행하는지")
     @Test
     public void preHandle(SoftAssertions softly) throws Exception {
         //given
-        when(userDao.findByEmail(KIM_EMAIL)).thenReturn(FIND_BY_EMAIL_RESPONSE_VIEW);
+        when(userRepository.findByEmail(KIM_EMAIL)).thenReturn(FIND_BY_EMAIL_RESPONSE_VIEW);
         MockHttpServletRequest request = jwtAuthHttpRequest(KIM_EMAIL);
 
         //when
