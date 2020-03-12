@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
 import static atdd.path.TestConstant.*;
+import static atdd.path.fixture.FavoriteFixture.STATION_NAME;
+import static atdd.station.TestConstant.*;
 
 public class GraphAcceptanceTest extends atdd.path.AbstractAcceptanceTest {
     private StationHttpTest stationHttpTest;

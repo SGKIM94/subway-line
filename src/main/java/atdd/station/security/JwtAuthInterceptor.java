@@ -1,7 +1,7 @@
 package atdd.station.security;
 
-import atdd.path.application.dto.user.FindByEmailResponseView;
-import atdd.path.dao.UserDao;
+import atdd.station.domain.UserRepository;
+import atdd.station.dto.user.FindByEmailResponseView;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 public class JwtAuthInterceptor extends HandlerInterceptorAdapter {
     public static final String AUTH_USER_KEY = "user";
     private TokenAuthenticationService tokenAuthenticationService;
-    private UserDao userDao;
+    private UserRepository userRepository;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -33,7 +33,7 @@ public class JwtAuthInterceptor extends HandlerInterceptorAdapter {
             return false;
         }
 
-        FindByEmailResponseView user = userDao.findByEmail(email);
+        FindByEmailResponseView user = userRepository.findByEmail(email);
         request.setAttribute(AUTH_USER_KEY, user.toEntity());
 
         return true;

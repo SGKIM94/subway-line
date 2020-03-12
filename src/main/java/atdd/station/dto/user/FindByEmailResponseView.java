@@ -1,6 +1,5 @@
 package atdd.station.dto.user;
 
-import atdd.station.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,8 +27,8 @@ public class FindByEmailResponseView {
         this.name = name;
     }
 
-    public User toEntity() {
-        return User.builder()
+    public atdd.path.domain.User toEntity() {
+        return atdd.path.domain.User.builder()
                 .id(id)
                 .name(name)
                 .email(email)
