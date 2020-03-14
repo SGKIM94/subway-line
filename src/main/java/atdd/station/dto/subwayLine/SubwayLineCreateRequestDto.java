@@ -1,6 +1,5 @@
 package atdd.station.dto.subwayLine;
 
-import atdd.station.domain.Subway;
 import atdd.station.domain.SubwayLine;
 import lombok.Builder;
 import lombok.Getter;

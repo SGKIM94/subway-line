@@ -1,7 +1,5 @@
 package atdd.station.fixture;
 
-import atdd.station.domain.Subway;
-
 import java.util.Arrays;
 import java.util.List;
 

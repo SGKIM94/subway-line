@@ -15,20 +15,24 @@ import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import java.util.List;
 import java.util.Objects;
 
-import static atdd.station.fixture.StationFixture.KANGNAM_AND_YUCKSAM_STATIONS;
-import static atdd.station.fixture.StationFixture.YUCKSAM_STATION_NAME;
+import static atdd.station.fixture.StationFixture.*;
+import static atdd.station.fixture.StationFixture.KANGNAM_STATION_NAME;
 import static atdd.station.fixture.SubwayLineFixture.*;
+import static atdd.station.fixture.SubwayLineFixture.FIRST_EDGE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SubwayLineAcceptanceTest extends atdd.path.AbstractAcceptanceTest {
     private static final String SUBWAY_LINE_API_BASE_URL = "/subway-lines/";
 
-    private RestWebClientTest restWebClientTest;
+
+    private atdd.path.web.RestWebClientTest restWebClientTest;
+    private CreateWebClientTest createWebClientTest;
 
     @BeforeEach
     void setUp() {
         cleanAllDatabases();
-        this.restWebClientTest = new RestWebClientTest(this.webTestClient);
+        this.createWebClientTest = new CreateWebClientTest(this.webTestClient);
+        this.restWebClientTest = new atdd.path.web.RestWebClientTest(this.webTestClient);
     }
 
     @DisplayName("2호선_지하철노선_생성이_성공하는지")
@@ -125,6 +129,27 @@ public class SubwayLineAcceptanceTest extends atdd.path.AbstractAcceptanceTest {
 
         //then
         assertThat(expectResponse.getStatus()).isEqualTo(HttpStatus.OK);
+    }
+
+    @DisplayName("Edge 가 생성되는지")
+    @Test
+    void createEdgeTest() {
+        createWebClientTest.createStation(0L, KANGNAM_STATION_NAME);
+        createWebClientTest.createStation(1L, YUCKSAM_STATION_NAME);
+        createWebClientTest.createLine(SECOND_SUBWAY_LINE_NAME);
+
+        //when
+        EntityExchangeResult<Edge> expectResponse
+                = restWebClientTest.postMethodAcceptance(SUBWAY_LINE_API_BASE_URL + "/edge", FIRST_EDGE, Edge.class);
+
+        //then
+        HttpHeaders responseHeaders = expectResponse.getResponseHeaders();
+        Edge edge = expectResponse.getResponseBody();
+
+        assertThat(responseHeaders.getLocation()).isNotNull();
+        assertThat(edge.getSourceStationName()).isEqualTo(KANGNAM_STATION_NAME);
+        assertThat(edge.getTargetStationName()).isEqualTo(YUCKSAM_STATION_NAME);
+        assertThat(edge.getDistance()).isEqualTo(10);
     }
 
 
