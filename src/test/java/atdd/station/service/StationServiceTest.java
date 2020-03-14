@@ -2,6 +2,9 @@ package atdd.station.service;
 
 import atdd.station.domain.Station;
 import atdd.station.domain.StationRepository;
+import atdd.station.dto.station.StationCreateRequestDto;
+import atdd.station.dto.station.StationCreateResponseDto;
+import atdd.station.dto.station.StationDetailResponseDto;
 import atdd.station.dto.station.StationListResponseDto;
 import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
@@ -17,6 +20,7 @@ import java.util.List;
 import static atdd.station.controller.StationAcceptanceTest.KANGNAM_STATION_JSON;
 import static atdd.station.fixture.StationFixture.*;
 import static atdd.station.fixture.SubwaysFixture.SUBWAYS;
+import static atdd.station.service.SubwayLineServiceTest.DEFAULT_ID;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -44,7 +48,7 @@ public class StationServiceTest {
         when(stationRepository.save(any())).thenReturn(station);
 
         StationCreateResponseDto createStation = stationService.create
-                (StationCreateRequestDto.toDtoEntity(station.getName(), station.getSubways()));
+                (StationCreateRequestDto.toDtoEntity(DEFAULT_ID, station.getName(), station.getSubways()));
 
         //then
         softly.assertThat(createStation.getId()).isEqualTo(KANGNAM_STATION_ID);
