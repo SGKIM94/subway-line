@@ -1,121 +1,84 @@
-package atdd.station.service;
+package atdd.station.domain;
 
-import atdd.station.domain.SubwayLine;
-import atdd.station.domain.SubwayLineRepository;
-import atdd.station.dto.subwayLine.*;
-import org.assertj.core.api.SoftAssertions;
-import org.assertj.core.api.junit.jupiter.SoftAssertionsExtension;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
 import static atdd.station.fixture.StationFixture.KANGNAM_AND_YUCKSAM_STATIONS;
 import static atdd.station.fixture.StationFixture.YUCKSAM_STATION_NAME;
-import static atdd.station.fixture.SubwayLineFixture.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static atdd.station.fixture.SubwayLineFixture.SECOND_SUBWAY_LINE_NAME;
+import static atdd.station.fixture.SubwayLineFixture.getSecondSubwayLine;
+import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(MockitoExtension.class)
-@ExtendWith(SoftAssertionsExtension.class)
-public class SubwayLineServiceTest {
+public class SubwayLineTest {
 
-    @Mock
-    SubwayLineRepository subwayLineRepository;
-
-    @InjectMocks
-    SubwayLineService subwayLineService;
-
-    private static final long DEFAULT_ID = 0L;
-
+    @DisplayName("Station_삭제시_deleted_가_false_로_되는지")
     @Test
-    public void 지하철노선_생성시_성공하는지(SoftAssertions softly) {
+    public void deleteSubwayLineSuccessTest() {
         //given
-        SubwayLine subwayLine = getSecondSubwayLineName();
+
+        SubwayLine subwayLine = new SubwayLine(SECOND_SUBWAY_LINE_NAME);
 
         //when
-        when(subwayLineRepository.save(any())).thenReturn(subwayLine);
-
-        SubwayLineCreateResponseDto createSubwayLine
-                = subwayLineService.create(SubwayLineCreateRequestDto.toDtoEntity(subwayLine, subwayLine.getSubways()));
+        subwayLine.deleteSubwayLine();
 
         //then
-        softly.assertThat(createSubwayLine.getId()).isEqualTo(DEFAULT_ID);
-        softly.assertThat(createSubwayLine.getName()).isEqualTo(SECOND_SUBWAY_LINE_NAME);
+        assertThat(subwayLine.isDeleted()).isTrue();
     }
 
+    @DisplayName("Subway_에_Stations_를_추가가_성공하는지")
     @Test
-    public void 지하철노선_list_조회가_성공하는지(SoftAssertions softly) {
+    public void addStationsInSubwayTest() {
         //given
-        List<SubwayLine> subwayLines = getSubwayLines();
+
+        SubwayLine subwayLine = new SubwayLine(SECOND_SUBWAY_LINE_NAME);
 
         //when
-        when(subwayLineRepository.findAll()).thenReturn(subwayLines);
-
-        SubwayLineListResponseDto listedSubwayLines = subwayLineService.list();
+        SubwayLine updatedSubwayLine = subwayLine.updateEdgesByStations(KANGNAM_AND_YUCKSAM_STATIONS);
 
         //then
-        softly.assertThat(listedSubwayLines).isNotNull();
-        softly.assertThat(listedSubwayLines.toString()).contains(FIRST_SUBWAY_LINE_NAME);
+        assertThat(updatedSubwayLine.getStations().size()).isEqualTo(2);
     }
 
+    @DisplayName("Stations_로_해당_subwayLine_에_추가된_것이_만들어지는지")
     @Test
-    public void 지하철노선_상세_조회가_성공하는지(SoftAssertions softly) {
+    public void makeSubwayByStationSuccessTest() {
         //given
-        SubwayLine subwayLine = getSecondSubwayLineName();
+
+        SubwayLine subwayLine = new SubwayLine(SECOND_SUBWAY_LINE_NAME);
 
         //when
-        when(subwayLineRepository.findById(DEFAULT_ID)).thenReturn(java.util.Optional.ofNullable(subwayLine));
-
-        SubwayLineDetailResponseDto detailSubwayLine = subwayLineService.detail(DEFAULT_ID);
+        List<Subway> madeSubways = subwayLine.makeEdgesByStations(KANGNAM_AND_YUCKSAM_STATIONS);
 
         //then
-        softly.assertThat(detailSubwayLine).isNotNull();
-        softly.assertThat(detailSubwayLine.getName()).contains(SECOND_SUBWAY_LINE_NAME);
+        assertThat(madeSubways.size()).isEqualTo(2);
     }
 
+    @DisplayName("역삼역_의_이름으로_삭제가_가능한지")
     @Test
-    public void 지하철노선_삭제가_성공하는지(SoftAssertions softly) {
+    public void deleteStationByNameTest() {
         //given
-        SubwayLine subwayLine = getSecondSubwayLineName();
+        SubwayLine subwayLine = getSecondSubwayLine();
 
-        when(subwayLineRepository.findById(DEFAULT_ID)).thenReturn(java.util.Optional.of(subwayLine));
-        subwayLineService.delete(DEFAULT_ID);
+        //when
+        subwayLine.deleteStationByName(YUCKSAM_STATION_NAME);
 
         //then
-        softly.assertThat(subwayLine.isDeleted()).isTrue();
+        assertThat(subwayLine.getStations().size()).isEqualTo(3);
     }
 
-
+    @DisplayName("subwayLine_내의_stations_에서_이름으로_해당_역으로_가져오는지")
     @Test
-    public void 지하철_2호선에_강남역_추가가_성공하는지(SoftAssertions softly) {
+    public void getStationByNameSuccessTest() {
         //given
-        SubwayLine subwayLine = getSubwayLine(SECOND_SUBWAY_LINE_NAME);
-        SubwayLine updatedSubwayLine = subwayLine.updateSubwayByStations(KANGNAM_AND_YUCKSAM_STATIONS);
+        SubwayLine subwayLine = getSecondSubwayLine();
 
-        when(subwayLineRepository.findById(DEFAULT_ID)).thenReturn(java.util.Optional.of(subwayLine));
-        when(subwayLineRepository.save(updatedSubwayLine)).thenReturn(updatedSubwayLine);
-
-        subwayLineService.update(DEFAULT_ID, SubwayLineUpdateRequestDto.toDtoEntity(KANGNAM_AND_YUCKSAM_STATIONS));
+        //when
+        Station station = subwayLine.getStationByName(YUCKSAM_STATION_NAME);
 
         //then
-        softly.assertThat(updatedSubwayLine.getName()).isEqualTo(SECOND_SUBWAY_LINE_NAME);
-    }
-
-    @Test
-    public void 지하철_2호선에서_역삼역이_삭제되는지(SoftAssertions softly) {
-        //given
-        SubwayLine subwayLine = getSecondSubwayLineName();
-
-        when(subwayLineRepository.findById(DEFAULT_ID)).thenReturn(java.util.Optional.of(subwayLine));
-
-        subwayLineService.deleteStation(DEFAULT_ID, YUCKSAM_STATION_NAME);
-
-        //then
-        softly.assertThat(subwayLine.getStationByName(YUCKSAM_STATION_NAME).isDeleted()).isTrue();
+        assertThat(station.getName()).isEqualTo(YUCKSAM_STATION_NAME);
     }
 
 }
