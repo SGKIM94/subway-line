@@ -1,18 +1,21 @@
 package atdd.station.controller;
 
-import atdd.path.application.dto.edge.CreateEdgeRequestView;
-import atdd.path.application.dto.line.LineResponseView;
-import atdd.path.application.dto.station.StationResponseView;
 import atdd.path.domain.User;
+import atdd.station.domain.Edge;
+import atdd.station.domain.Edges;
+import atdd.station.dto.station.StationCreateRequestDto;
+import atdd.station.dto.station.StationCreateResponseDto;
+import atdd.station.dto.subwayLine.SubwayLineCreateRequestDto;
+import atdd.station.dto.subwayLine.SubwayLineCreateResponseDto;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
-import static atdd.path.web.LineAcceptanceTest.LINE_INPUT_JSON;
-import static atdd.path.web.LineAcceptanceTest.LINE_URL;
-import static atdd.path.web.StationAcceptanceTest.STATION_URL;
 import static atdd.path.web.UserAcceptanceTest.KIM_INPUT_JSON;
 import static atdd.path.web.UserAcceptanceTest.USER_BASE_URL;
+import static atdd.station.docs.UserDocumentationTest.USER_BASE_URL;
+import static atdd.station.fixture.SubwayLineFixture.*;
 
 public class CreateWebClientTest extends atdd.path.web.RestWebClientTest {
 
@@ -28,23 +31,23 @@ public class CreateWebClientTest extends atdd.path.web.RestWebClientTest {
                 .getPath());
     }
 
-    Long createStation(String stationName, String jwt) {
-        StationResponseView responseView = new StationResponseView(1L, stationName);
-        return Objects.requireNonNull(
-                postMethodWithAuthAcceptance(STATION_URL, responseView, StationResponseView.class, jwt)
-                        .getResponseBody().getId());
+    Long createStation(Long id, String stationName) {
+        StationCreateRequestDto station = new StationCreateRequestDto(id, stationName, new ArrayList<>());
+        return Objects.requireNonNull(postMethodAcceptance(STATION_BASE_URL, station, StationCreateResponseDto.class)
+                .getResponseBody()).getId();
     }
 
-    Long createLine(String jwt) {
-        return Objects.requireNonNull(
-                postMethodWithAuthAcceptance(LINE_URL, LINE_INPUT_JSON, LineResponseView.class, jwt)
-                        .getResponseBody().getId());
+    Long createLine(String lineName) {
+        SubwayLineCreateRequestDto line = new SubwayLineCreateRequestDto
+                (lineName, DEFAULT_START_TIME, DEFAULT_END_TIME, DEFAULT_INTERVAL, new ArrayList<>(), new Edges());
+
+        return Objects.requireNonNull(postMethodAcceptance(LINE_BASE_URL, line, SubwayLineCreateResponseDto.class)
+                .getResponseBody()).getId();
     }
 
-    void createEdge(Long lineId, Long sourceStationId, Long targetStationId, int distance, String jwt) {
-        CreateEdgeRequestView requestView = new CreateEdgeRequestView(sourceStationId, targetStationId, distance);
+    void createEdge(Edge edge, Long lineId) {
         Objects.requireNonNull(
-                postMethodWithAuthAcceptance(LINE_URL + "/" + lineId + "/edges", requestView, Void.class, jwt))
+                postMethodAcceptance(LINE_BASE_URL + "/" + lineId + "/edges", edge, Void.class))
                 .getResponseBody();
     }
 }
