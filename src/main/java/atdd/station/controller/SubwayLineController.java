@@ -1,5 +1,6 @@
 package atdd.station.controller;
 
+import atdd.station.domain.Edge;
 import atdd.station.domain.SubwayLine;
 import atdd.station.dto.subwayLine.*;
 import atdd.station.service.SubwayLineService;
@@ -56,4 +57,9 @@ public class SubwayLineController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PostMapping("/edge")
+    public ResponseEntity<Edge> createEdge(@RequestBody Edge edge) {
+        Edge savedEdge = subwayLineService.createEdge(edge);
+        return ResponseEntity.created(URI.create("/subway-lines/" + edge.getId())).body(savedEdge);
+    }
 }
