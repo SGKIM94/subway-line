@@ -2,20 +2,22 @@ package atdd.station.domain;
 
 import org.hibernate.annotations.Where;
 
-import javax.persistence.*;
+import javax.persistence.Embeddable;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Embeddable
 public class Edges {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
-    @OneToMany(mappedBy = "subwayLine", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "subwayLine")
     @Where(clause = "deleted = false")
     @OrderBy("id ASC")
-    private List<Edge> edges;
+    private List<Edge> edges = new ArrayList<>();
 
     public Edges() {
     }
@@ -24,33 +26,42 @@ public class Edges {
         this.edges = edges;
     }
 
-    public long getId() {
-        return id;
-    }
-
     public List<Edge> getEdges() {
         return edges;
     }
 
-    private List<Station> getStations(List<atdd.path.domain.Edge> edges) {
-        if (edges.size() == 0) {
+    public List<Station> getStations() {
+        if (edges.isEmpty()) {
             return new ArrayList<>();
         }
 
-        List<Station> stations = new ArrayList();
-        Station lastStation = findFirstStation(edges);
-        stations.add(lastStation);
+        List<Station> sourceStations = getSourceStations();
+        List<Station> targetStations = getTargetStations();
 
-        while (true) {
-            Station nextStation = findNextStationOf(edges, lastStation);
-            if (nextStation == null) {
-                break;
-            }
-            stations.add(nextStation);
-            lastStation = nextStation;
+        if (sourceStations.isEmpty() && targetStations.isEmpty()) {
+            return new ArrayList<>();
         }
 
-        return stations;
+        return Stream.of(sourceStations, targetStations)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
     }
 
+    private List<Station> getTargetStations() {
+        return this.edges.stream()
+                .map(Edge::getTargetStation)
+                .collect(Collectors.toList());
+    }
+
+    private List<Station> getSourceStations() {
+        return this.edges.stream()
+                .map(Edge::getSourceStation)
+                .collect(Collectors.toList());
+    }
+
+    public List<SubwayLine> getSubwayLines() {
+        return this.edges.stream()
+                .map(Edge::getSubwayLine)
+                .collect(Collectors.toList());
+    }
 }

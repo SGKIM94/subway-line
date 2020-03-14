@@ -1,15 +1,15 @@
 package atdd.station.domain;
 
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
+@NoArgsConstructor
 public class Station {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,14 +18,16 @@ public class Station {
     @Size(min = 2, max = 20)
     private String name;
 
-    @OneToMany(mappedBy = "subwayLine", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "subwayLine")
     @Where(clause = "deleted = false")
     @OrderBy("id ASC")
-    private List<Subway> subways = new ArrayList<>();
+    private Edges edges;
 
     private boolean deleted = false;
 
-    public Station() {
+    public Station(long id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
     public Station(String name) {
@@ -33,9 +35,10 @@ public class Station {
     }
 
     @Builder
-    public Station(String name, List<Subway> subways) {
+    public Station(Long id, String name, Edges edges) {
+        this.id = id;
         this.name = name;
-        this.subways = subways;
+        this.edges = edges;
     }
 
     public long getId() {
@@ -46,14 +49,8 @@ public class Station {
         return this.name;
     }
 
-    public List<Subway> getSubways() {
-        return this.subways;
-    }
-
     public List<SubwayLine> getSubwayLines() {
-        return this.subways.stream()
-                .map(Subway::getSubwayLine)
-                .collect(Collectors.toList());
+        return this.edges.getSubwayLines();
     }
 
     public void deleteStation() {

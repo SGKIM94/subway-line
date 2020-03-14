@@ -1,7 +1,6 @@
 package atdd.station.controller;
 
 import atdd.station.domain.Station;
-import atdd.station.dto.station.StationDetailResponseDto;
 import atdd.station.dto.station.StationListResponseDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

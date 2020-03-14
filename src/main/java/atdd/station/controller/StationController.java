@@ -2,7 +2,6 @@ package atdd.station.controller;
 
 import atdd.station.dto.station.StationCreateRequestDto;
 import atdd.station.dto.station.StationCreateResponseDto;
-import atdd.station.dto.station.StationDetailResponseDto;
 import atdd.station.dto.station.StationListResponseDto;
 import atdd.station.service.StationService;
 import org.springframework.http.HttpStatus;
