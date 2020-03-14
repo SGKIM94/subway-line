@@ -1,82 +1,80 @@
-package atdd.path.domain;
+package atdd.station.domain;
 
-import org.springframework.dao.DuplicateKeyException;
+import lombok.Builder;
 
-import java.util.List;
+import javax.persistence.*;
 
-public class Edge extends atdd.path.domain.Item {
-    private Long id;
+@Entity
+public class Edge {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @OneToOne
+    @JoinColumn(name = "station_source_id")
     private Station sourceStation;
+
+    @OneToOne
+    @JoinColumn(name = "station_target_id")
     private Station targetStation;
+
+    @ManyToOne
+    @JoinColumn(name = "subway_line_id")
+    private SubwayLine subwayLine;
+
     private int distance;
+
+    private boolean deleted = false;
 
     public Edge() {
     }
 
-    public Edge(Long id, Station sourceStation, Station targetStation, int distance) {
+    @Builder
+    public Edge(Long id, Station sourceStation, Station targetStation, SubwayLine subwayLine, int distance) {
         this.id = id;
         this.sourceStation = sourceStation;
         this.targetStation = targetStation;
+        this.subwayLine = subwayLine;
         this.distance = distance;
     }
 
-    public static Edge of(Station sourceStation, Station targetStation, int distance) {
-        return new Edge(null, sourceStation, targetStation, distance);
+    public SubwayLine getSubwayLine() {
+        return subwayLine;
     }
 
-    public void checkSourceAndTargetStationIsSameWhenEdge() {
-        if (isSameNameWithSourceAndTarget()) {
-            throw new DuplicateKeyException("시작역과 종착역이 같을 수 없습니다.");
-        }
-    }
-
-    public boolean isSameNameWithSourceAndTarget() {
-        return getSourceStationName().equals(getTargetStationName());
-    }
-
-    private String getTargetStationName() {
-        return targetStation.getName();
-    }
-
-    private String getSourceStationName() {
-        return sourceStation.getName();
-    }
-
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public int getDistance() {
-        return distance;
+    public long getSourceStationId() {
+        return sourceStation.getId();
+    }
+
+    public long getTargetStationId() {
+        return targetStation.getId();
     }
 
     public Station getSourceStation() {
         return sourceStation;
     }
 
+    public String getSourceStationName() {
+        return sourceStation.getName();
+    }
+
     public Station getTargetStation() {
         return targetStation;
     }
 
-    public boolean hasStation(Station station) {
-        return sourceStation.equals(station) || targetStation.equals(station);
+    public String getTargetStationName() {
+        return targetStation.getName();
     }
 
-    public void validateFavoriteEdge() {
-        checkBidirectionalSourceAndTarget();
-        checkSourceAndTargetStationIsSameWhenEdge();
+    public int getDistance() {
+        return distance;
     }
 
-    public void checkBidirectionalSourceAndTarget() {
-        checkLineInStationHasOppositeStation(getSourceStation(), getTargetStation());
-        checkLineInStationHasOppositeStation(getTargetStation(), getSourceStation());
-    }
-
-    private void checkLineInStationHasOppositeStation(Station station, Station oppositeStation) {
-        List<Line> linesInStation = station.getLines();
-        linesInStation.stream()
-                .filter(line -> line.getStations().contains(oppositeStation))
-                .findFirst()
-                .orElseThrow(IllegalArgumentException::new);
+    public boolean isDeleted() {
+        return deleted;
     }
 }
