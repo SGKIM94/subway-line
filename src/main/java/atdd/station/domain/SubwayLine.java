@@ -35,10 +35,10 @@ public class SubwayLine {
     @OneToMany(mappedBy = "station", fetch = FetchType.EAGER)
     @Where(clause = "deleted = false")
     @OrderBy("id ASC")
-    private List<Subway> subways = new ArrayList<>();
+    private List<Edges> subways = new ArrayList<>();
 
     @Embedded
-    private Edges edges;
+    private Edges edges = new Edges();
 
     private boolean deleted = false;
 
@@ -46,13 +46,14 @@ public class SubwayLine {
     }
 
     @Builder
-    public SubwayLine(String name, String startTime, String endTime, String intervalTime, List<Subway> subways) {
+    public SubwayLine(long id, String name, String startTime, String endTime, String intervalTime, Edges edges) {
+        this.id = id;
         this.name = name;
         this.startTime = startTime;
         this.endTime = endTime;
         this.intervalTime = intervalTime;
         this.startTime = startTime;
-        this.subways = subways;
+        this.edges = edges;
     }
 
     public SubwayLine(String name) {
@@ -60,6 +61,15 @@ public class SubwayLine {
         this.startTime = DEFAULT_START_TIME;
         this.endTime = DEFAULT_END_TIME;
         this.intervalTime = DEFAULT_INTERVAL;
+        this.edges = new Edges();
+    }
+
+    public SubwayLine(String name, Edges edges) {
+        this.name = name;
+        this.startTime = DEFAULT_START_TIME;
+        this.endTime = DEFAULT_END_TIME;
+        this.intervalTime = DEFAULT_INTERVAL;
+        this.edges = edges;
     }
 
     public long getId() {
@@ -90,8 +100,8 @@ public class SubwayLine {
         return this.deleted;
     }
 
-    public List<Subway> getSubways() {
-        return this.subways;
+    public Edges getEdges() {
+        return edges;
     }
 
     public Stream<Edge> getEdgesStream() {
@@ -99,19 +109,17 @@ public class SubwayLine {
     }
 
     public List<Station> getStations() {
-        return this.subways.stream()
-                .map(Subway::getStation)
-                .collect(Collectors.toList());
+        return this.edges.getStations();
     }
 
-    public SubwayLine updateSubwayByStations(List<Station> stations) {
-        this.subways.addAll(makeSubwaysByStations(stations));
+    public SubwayLine updateEdgesByStations(List<Station> stations) {
+        this.subways.addAll(makeEdgesByStations(stations));
         return this;
     }
 
-    List<Subway> makeSubwaysByStations(List<Station> stations) {
+    List<Subway> makeEdgesByStations(List<Station> stations) {
         return stations.stream()
-                .map(station -> new Subway(station, this))
+                .map(station -> new Edge(station, this))
                 .collect(Collectors.toList());
     }
 
