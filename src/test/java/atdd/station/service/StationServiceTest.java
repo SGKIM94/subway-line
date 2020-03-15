@@ -19,7 +19,6 @@ import java.util.List;
 
 import static atdd.station.controller.StationAcceptanceTest.KANGNAM_STATION_JSON;
 import static atdd.station.fixture.StationFixture.*;
-import static atdd.station.fixture.SubwaysFixture.SUBWAYS;
 import static atdd.station.service.SubwayLineServiceTest.DEFAULT_ID;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -41,14 +40,13 @@ public class StationServiceTest {
         //given
         Station station = Station.builder()
                 .name(KANGNAM_STATION_JSON)
-                .subways(SUBWAYS)
                 .build();
 
         //when
         when(stationRepository.save(any())).thenReturn(station);
 
         StationCreateResponseDto createStation = stationService.create
-                (StationCreateRequestDto.toDtoEntity(DEFAULT_ID, station.getName(), station.getSubways()));
+                (StationCreateRequestDto.toDtoEntity(DEFAULT_ID, station.getName()));
 
         //then
         softly.assertThat(createStation.getId()).isEqualTo(KANGNAM_STATION_ID);
