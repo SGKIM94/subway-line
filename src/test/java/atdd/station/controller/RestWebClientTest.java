@@ -14,7 +14,7 @@ public class RestWebClientTest {
         this.webTestClient = webTestClient;
     }
 
-    <T> EntityExchangeResult<T> postMethodAcceptance(String uri, Object requestBody, Class<T> bodyClass) {
+    protected <T> EntityExchangeResult<T> postMethodAcceptance(String uri, Object requestBody, Class<T> bodyClass) {
         return postMethodWithAuthAcceptance(uri, requestBody, bodyClass, NO_AUTHORIZATION);
     }
 
