@@ -33,7 +33,6 @@ public class StationFixture {
         return Station.builder()
                 .id(DEFAULT_STATION_ID)
                 .name(name)
-                .subways(SUBWAYS)
                 .build();
     }
 }
