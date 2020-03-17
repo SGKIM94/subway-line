@@ -3,7 +3,6 @@ package atdd.station.domain;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.Embeddable;
-import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import java.util.ArrayList;
@@ -64,4 +63,12 @@ public class Edges {
                 .map(Edge::getSubwayLine)
                 .collect(Collectors.toList());
     }
+
+    public Station findStationByName(String stationName) {
+        return this.edges.stream()
+                .filter(edge -> stationName.equals(edge.getSourceStationName()))
+                .findFirst()
+                .orElse();
+    }
+
 }
