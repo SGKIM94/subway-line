@@ -27,4 +27,17 @@ public class EdgesTest {
         //then
         assertThat(stations).hasSize(4);
     }
+
+    @DisplayName("강남역 의 이름을 가진 역을 가져오는지")
+    @Test
+    public void  findStationByName() {
+        //given
+        Edge firstEdge = new Edge(0L, KANGNAM_STATION, PANGYO_STATION, SECOND_SUBWAY_LINE, 10);
+        Edge secondEdge = new Edge(1L, SUNLENG_STATON, EMAE_STATION, FIRST_SUBWAY_LINE, 10);
+        Edges edges = new Edges(Arrays.asList(firstEdge, secondEdge));
+
+        Station station = edges.findStationByName(KANGNAM_STATION_NAME);
+
+        assertThat(station.getName()).isEqualTo(KANGNAM_STATION_NAME);
+    }
 }
