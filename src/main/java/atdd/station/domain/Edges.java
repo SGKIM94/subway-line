@@ -65,10 +65,20 @@ public class Edges {
     }
 
     public Station findStationByName(String stationName) {
-        return this.edges.stream()
+        Edge findSourceEdge = this.edges.stream()
                 .filter(edge -> stationName.equals(edge.getSourceStationName()))
                 .findFirst()
-                .orElse();
-    }
+                .orElse(null);
 
+        if (findSourceEdge != null) {
+            return findSourceEdge.getSourceStation();
+        }
+
+        Edge findTargetEdge = this.edges.stream()
+                .filter(edge -> stationName.equals(edge.getTargetStationName()))
+                .findFirst()
+                .orElseThrow(IllegalAccessError::new);
+
+        return findTargetEdge.getTargetStation();
+    }
 }
