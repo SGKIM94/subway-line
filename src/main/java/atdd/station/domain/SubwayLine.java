@@ -129,11 +129,7 @@ public class SubwayLine {
     }
 
     public Station getStationByName(String stationName) {
-        return this.subways.stream()
-                .filter(subway -> subway.isThisNameTheStation(stationName))
-                .findFirst()
-                .orElseThrow(IllegalArgumentException::new)
-                .getStation();
+        return this.edges.findStationByName(stationName);
     }
 
     @Override
