@@ -38,6 +38,14 @@ public class Edge {
         this.distance = distance;
     }
 
+    public Edge(Station sourceStation, Station targetStation, SubwayLine subwayLine) {
+        this.id = id;
+        this.sourceStation = sourceStation;
+        this.targetStation = targetStation;
+        this.subwayLine = subwayLine;
+        this.distance = 10;
+    }
+
     public SubwayLine getSubwayLine() {
         return subwayLine;
     }
