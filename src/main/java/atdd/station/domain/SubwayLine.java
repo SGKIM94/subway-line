@@ -113,13 +113,13 @@ public class SubwayLine {
     }
 
     public SubwayLine updateEdgesByStations(List<Station> stations) {
-        this.subways.addAll(makeEdgesByStations(stations));
+        this.subways.addAll(new Edges(makeEdgesByStations(stations));
         return this;
     }
 
-    List<Subway> makeEdgesByStations(List<Station> stations) {
+    List<Edge> makeEdgesByStations(List<Station> stations) {
         return stations.stream()
-                .map(station -> new Edge(station, this))
+                .map(station -> new Edge(station, null,this))
                 .collect(Collectors.toList());
     }
 
