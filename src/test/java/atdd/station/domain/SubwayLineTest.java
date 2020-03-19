@@ -35,7 +35,7 @@ public class SubwayLineTest {
         SubwayLine subwayLine = new SubwayLine(SECOND_SUBWAY_LINE_NAME);
 
         //when
-        SubwayLine updatedSubwayLine = subwayLine.updateSubwayByStations(KANGNAM_AND_YUCKSAM_STATIONS);
+        SubwayLine updatedSubwayLine = subwayLine.updateEdgesByStations(KANGNAM_AND_YUCKSAM_STATIONS);
 
         //then
         assertThat(updatedSubwayLine.getStations().size()).isEqualTo(2);
@@ -49,7 +49,7 @@ public class SubwayLineTest {
         SubwayLine subwayLine = new SubwayLine(SECOND_SUBWAY_LINE_NAME);
 
         //when
-        List<Subway> madeSubways = subwayLine.makeSubwaysByStations(KANGNAM_AND_YUCKSAM_STATIONS);
+        List<Edge> madeSubways = subwayLine.makeEdgesByStations(KANGNAM_AND_YUCKSAM_STATIONS);
 
         //then
         assertThat(madeSubways.size()).isEqualTo(2);
