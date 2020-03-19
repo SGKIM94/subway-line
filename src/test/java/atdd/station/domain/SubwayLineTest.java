@@ -15,7 +15,7 @@ public class SubwayLineTest {
 
     @DisplayName("Station_삭제시_deleted_가_false_로_되는지")
     @Test
-    public void deleteSubwayLineSuccessTest() {
+    public void deleteSubwayLineTest() {
         //given
 
         SubwayLine subwayLine = new SubwayLine(SECOND_SUBWAY_LINE_NAME);
@@ -43,7 +43,7 @@ public class SubwayLineTest {
 
     @DisplayName("Stations_로_해당_subwayLine_에_추가된_것이_만들어지는지")
     @Test
-    public void makeSubwayByStationSuccessTest() {
+    public void makeSubwayByStationTest() {
         //given
 
         SubwayLine subwayLine = new SubwayLine(SECOND_SUBWAY_LINE_NAME);
@@ -70,7 +70,7 @@ public class SubwayLineTest {
 
     @DisplayName("subwayLine_내의_stations_에서_이름으로_해당_역으로_가져오는지")
     @Test
-    public void getStationByNameSuccessTest() {
+    public void getStationByNameTest() {
         //given
         SubwayLine subwayLine = getSecondSubwayLineName();
 
