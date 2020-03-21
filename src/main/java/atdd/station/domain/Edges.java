@@ -81,4 +81,13 @@ public class Edges {
 
         return findTargetEdge.getTargetStation();
     }
+
+    public Edges addEdge(Edge edge) {
+        edges.add(edge);
+        return new Edges(edges);
+    }
+
+    public int getSize() {
+        return edges.size();
+    }
 }
