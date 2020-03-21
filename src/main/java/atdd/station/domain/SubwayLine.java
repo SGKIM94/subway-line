@@ -132,6 +132,10 @@ public class SubwayLine {
         return this.edges.findStationByName(stationName);
     }
 
+    public void updateEdge(Edge edge) {
+        edges.addEdge(edge);
+    }
+
     @Override
     public String toString() {
         return "SubwayLine{" +
