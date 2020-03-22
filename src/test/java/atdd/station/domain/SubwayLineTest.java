@@ -3,12 +3,9 @@ package atdd.station.domain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
-import static atdd.station.fixture.StationFixture.KANGNAM_AND_YUCKSAM_STATIONS;
 import static atdd.station.fixture.StationFixture.YUCKSAM_STATION_NAME;
 import static atdd.station.fixture.SubwayLineFixture.SECOND_SUBWAY_LINE_NAME;
-import static atdd.station.fixture.SubwayLineFixture.getSecondSubwayLineName;
+import static atdd.station.fixture.SubwayLineFixture.getSecondSubwayLine;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SubwayLineTest {
@@ -35,31 +32,17 @@ public class SubwayLineTest {
         SubwayLine subwayLine = new SubwayLine(SECOND_SUBWAY_LINE_NAME);
 
         //when
-        SubwayLine updatedSubwayLine = subwayLine.updateEdgesByStations(KANGNAM_AND_YUCKSAM_STATIONS);
+        subwayLine.updateEdge(FIRST_EDGE);
 
         //then
-        assertThat(updatedSubwayLine.getStations().size()).isEqualTo(2);
-    }
-
-    @DisplayName("Stations_로_해당_subwayLine_에_추가된_것이_만들어지는지")
-    @Test
-    public void makeSubwayByStationTest() {
-        //given
-
-        SubwayLine subwayLine = new SubwayLine(SECOND_SUBWAY_LINE_NAME);
-
-        //when
-        List<Edge> madeSubways = subwayLine.makeEdgesByStations(KANGNAM_AND_YUCKSAM_STATIONS);
-
-        //then
-        assertThat(madeSubways.size()).isEqualTo(2);
+        assertThat(subwayLine.getEdgesSize()).isEqualTo(2);
     }
 
     @DisplayName("역삼역_의_이름으로_삭제가_가능한지")
     @Test
     public void deleteStationByNameTest() {
         //given
-        SubwayLine subwayLine = getSecondSubwayLineName();
+        SubwayLine subwayLine = getSecondSubwayLine();
 
         //when
         subwayLine.deleteStationByName(YUCKSAM_STATION_NAME);
@@ -72,7 +55,7 @@ public class SubwayLineTest {
     @Test
     public void getStationByNameTest() {
         //given
-        SubwayLine subwayLine = getSecondSubwayLineName();
+        SubwayLine subwayLine = getSecondSubwayLine();
 
         //when
         Station station = subwayLine.getStationByName(YUCKSAM_STATION_NAME);
