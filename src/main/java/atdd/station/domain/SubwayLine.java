@@ -8,7 +8,6 @@ import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Entity
 public class SubwayLine {
@@ -98,14 +97,6 @@ public class SubwayLine {
 
     public boolean isDeleted() {
         return this.deleted;
-    }
-
-    public Edges getEdges() {
-        return edges;
-    }
-
-    public Stream<Edge> getEdgesStream() {
-        return this.edges.getEdges().stream();
     }
 
     public List<Station> getStations() {
