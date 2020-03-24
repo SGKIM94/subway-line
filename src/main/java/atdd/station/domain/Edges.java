@@ -83,6 +83,7 @@ public class Edges {
     }
 
     public Edges addEdge(Edge edge) {
+        List<Edge> edges = new ArrayList<>(this.edges);
         edges.add(edge);
         return new Edges(edges);
     }
