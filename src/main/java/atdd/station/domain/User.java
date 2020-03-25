@@ -1,4 +1,4 @@
-package atdd.path.domain;
+package atdd.station.domain;
 
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -8,8 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static atdd.path.dao.UserDao.*;
-import static atdd.station.dto.user.FindByEmailResponseView.*;
+import static atdd.station.dto.user.FindByEmailResponseView.EMAIL_KEY;
+import static atdd.station.dto.user.FindByEmailResponseView.NAME_KEY;
+import static org.springframework.data.crossstore.ChangeSetPersister.ID_KEY;
 
 @NoArgsConstructor
 public class User {
@@ -17,10 +18,10 @@ public class User {
     private String email;
     private String name;
     private String password;
-    private List<Favorite> favorites = new ArrayList<>();
+    private List<atdd.path.domain.Favorite> favorites = new ArrayList<>();
 
     @Builder
-    public User(Long id, String email, String name, String password, List<Favorite> favorites) {
+    public User(Long id, String email, String name, String password, List<atdd.path.domain.Favorite> favorites) {
         this.id = id;
         this.email = email;
         this.name = name;
@@ -74,7 +75,7 @@ public class User {
         return password;
     }
 
-    public List<Favorite> getFavorites() {
+    public List<atdd.path.domain.Favorite> getFavorites() {
         return favorites;
     }
 }
