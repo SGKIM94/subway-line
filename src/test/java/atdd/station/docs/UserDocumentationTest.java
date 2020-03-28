@@ -1,29 +1,34 @@
-package atdd.station.docs;
+package atdd.user.docs;
 
-import atdd.station.AbstractDocumentationTest;
-import atdd.station.controller.UserController;
+import atdd.AbstractDocumentationTest;
+import atdd.station.docs.FieldsSnippet;
 import atdd.user.application.UserService;
+import atdd.user.application.dto.CreateUserRequestView;
+import atdd.user.application.dto.LoginUserRequestView;
 import atdd.user.domain.User;
+import atdd.user.web.UserController;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.hypermedia.LinksSnippet;
-import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.restdocs.headers.RequestHeadersSnippet;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 
+import static atdd.security.BearerTokenExtractor.BEARER_TYPE;
+import static atdd.user.fixture.TestConstant.FIRST_TEST_USER;
+import static atdd.user.fixture.TestConstant.TEST_USER_EMAIL;
+import static atdd.user.fixture.UserFixture.getCreateUserRequestView;
+import static atdd.user.fixture.UserFixture.getLoginUserRequestView;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -33,101 +38,99 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(UserController.class)
 public class UserDocumentationTest extends AbstractDocumentationTest {
     public static final String TEST_USER_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgxOTg1NjYzLCJleHAiOjE1ODE5ODkyNjN9.nL07LEhgTVzpUdQrOMbJq-oIce_idEdPS62hB2ou2hg";
+    public static final String USER_ID = "id";
+    public static final String USER_EMAIL = "email";
+    public static final String USER_PASSWORD = "password";
+    public static final String USER_NAME = "name";
     public static final String USER_BASE_URL = "/users";
+    public static final String EMAIL_PATH = "$.email";
 
     @MockBean
     private UserService userService;
+    private FieldsSnippet fieldsSnippet;
 
+    @BeforeEach
+    void setUp() {
+        fieldsSnippet = new FieldsSnippet();
+    }
 
-    @DisplayName("유저를 등록하는 API 의 문서가 생성되는지")
+    @DisplayName("사용자를 생성하는 API 의 Rest Docs 를 생성 하는지")
     @Test
     void create() throws Exception {
-        String inputJson = saveUser();
+        //given
+        User user = FIRST_TEST_USER;
+        CreateUserRequestView createUserRequestView = getCreateUserRequestView(user);
 
-        this.mockMvc.perform(post(USER_BASE_URL)
-                .content(inputJson)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated())
-                .andDo(
-                        document("users/create",
-//                                getDocsLink(),
-                                getRequestFieldsSnippet(),
-                                getResponseFieldsSnippet()
-                        )
-                )
-                .andDo(print());
-    }
-
-    @DisplayName("유저를 조회하는 API 의 문서가 생성되는지")
-    @Test
-    void me() throws Exception {
-        String retrieveUserUrl = USER_BASE_URL + "/me";
-        given(userService.findUserByEmail(anyString())).willReturn(NEW_USER);
-
-        this.mockMvc.perform(get(retrieveUserUrl)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + TEST_USER_TOKEN)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email").value(TEST_USER_EMAIL))
-                .andDo(
-                        document("users/me",
-//                                getDocsLink(),
-                                requestHeaders(
-                                        headerWithName("Authorization").description(
-                                                "Bearer auth credentials")
-                                ),
-                                getResponseFieldsSnippet()
-                        ))
-                .andDo(print());
-    }
-
-    @DisplayName("로그인하는 API 의 문서가 생성되는지")
-    @Test
-    void login() throws Exception {
-        String inputJson = saveUser();
-        String loginUserUrl = USER_BASE_URL + "/login";
-
-        this.mockMvc.perform(post(loginUserUrl)
-                .content(inputJson)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andDo(
-                        document("users/login",
-//                                getDocsLink(),
-                                getRequestFieldsSnippet(),
-                                getResponseFieldsSnippet()
-                        )
-                )
-                .andDo(print());
-    }
-
-    private LinksSnippet getDocsLink() {
-        return links(linkWithRel("profile").description("Link to the profile resource"));
-    }
-
-    private ResponseFieldsSnippet getResponseFieldsSnippet() {
-        return responseFields(
-                fieldWithPath("id").type(JsonFieldType.NUMBER).description("The user's id"),
-                fieldWithPath("email").type(JsonFieldType.STRING).description("The user's email address"),
-                fieldWithPath("password").type(JsonFieldType.STRING).description("The user's password"),
-                fieldWithPath("name").type(JsonFieldType.STRING).description("The user's name")
-        );
-    }
-
-    private RequestFieldsSnippet getRequestFieldsSnippet() {
-        return requestFields(
-                fieldWithPath("email").type(JsonFieldType.STRING).description("The user's email address"),
-                fieldWithPath("password").type(JsonFieldType.STRING).description("The user's password"),
-                fieldWithPath("name").type(JsonFieldType.STRING).description("The user's name")
-        );
-    }
-
-    private String saveUser() {
-        User user = NEW_USER;
         given(userService.save(any())).willReturn(user);
 
-        return "{\"email\":\"" + user.getEmail() + "\"," +
-                "\"password\":\"" + user.getPassword() + "\"," +
-                "\"name\":\"" + user.getName() + "\"}";
+        //when
+        this.mockMvc.perform(post(USER_BASE_URL)
+                .content(getContentWithView(createUserRequestView))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andDo(document("users/create", getUserRequestFieldsSnippet(), getUserResponseFieldsSnippet()))
+                .andDo(print());
+    }
+
+    @DisplayName("사용자를 조회하는 API 의 Rest Docs 를 생성 하는지")
+    @Test
+    void retrieveUser() throws Exception {
+        //given
+        given(userService.findUserByEmail(anyString())).willReturn(FIRST_TEST_USER);
+
+        //when
+        this.mockMvc.perform(get(USER_BASE_URL)
+                .header(HttpHeaders.AUTHORIZATION, BEARER_TYPE + " " + TEST_USER_TOKEN)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath(EMAIL_PATH).value(TEST_USER_EMAIL))
+                .andDo(document("users/me", getAuthorizationHeaderSnippet(), getUserResponseFieldsSnippet()))
+                .andDo(print());
+    }
+
+    @DisplayName("사용자 login API 의 Rest Docs 를 생성 하는지")
+    @Test
+    void login() throws Exception {
+        //given
+        User user = FIRST_TEST_USER;
+        LoginUserRequestView loginUserRequestView = getLoginUserRequestView(user);
+
+        given(userService.save(any())).willReturn(user);
+
+        //when
+        this.mockMvc.perform(post(USER_BASE_URL)
+                .content(getContentWithView(loginUserRequestView))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andDo(fieldsSnippet.writeResultDocument("users/login", getLoginRequestFieldsSnippet()))
+                .andDo(print());
+    }
+
+    private RequestFieldsSnippet getLoginRequestFieldsSnippet() {
+        return requestFields(
+                fieldsSnippet.writeStringSnippetDescription(USER_EMAIL, "The user's email address"),
+                fieldsSnippet.writeStringSnippetDescription(USER_PASSWORD, "The user's password"));
+    }
+
+    private RequestFieldsSnippet getUserRequestFieldsSnippet() {
+        return requestFields(
+                fieldsSnippet.writeNumberSnippetDescription(USER_ID, "The user's id"),
+                fieldsSnippet.writeStringSnippetDescription(USER_EMAIL, "The user's email address"),
+                fieldsSnippet.writeStringSnippetDescription(USER_PASSWORD, "The user's password"),
+                fieldsSnippet.writeStringSnippetDescription(USER_NAME, "The user's name")
+        );
+    }
+
+    private ResponseFieldsSnippet getUserResponseFieldsSnippet() {
+        return responseFields(
+                fieldsSnippet.writeNumberSnippetDescription(USER_ID, "The user's id"),
+                fieldsSnippet.writeStringSnippetDescription(USER_EMAIL, "The user's email address"),
+                fieldsSnippet.writeStringSnippetDescription(USER_PASSWORD, "The user's password"),
+                fieldsSnippet.writeStringSnippetDescription(USER_NAME, "The user's name")
+        );
+    }
+
+    private RequestHeadersSnippet getAuthorizationHeaderSnippet() {
+        return fieldsSnippet.getAuthorizationHeaderSnippet("Bearer auth credentials");
     }
 }
