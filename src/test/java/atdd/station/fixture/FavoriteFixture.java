@@ -11,6 +11,8 @@ import java.util.Map;
 import static atdd.path.TestConstant.*;
 import static atdd.path.dao.FavoriteDao.*;
 import static atdd.path.fixture.UserFixture.*;
+import static atdd.station.TestConstant.*;
+import static atdd.station.fixture.UserFixture.NEW_USER;
 
 public class FavoriteFixture {
     public static final Long FAVORITE_ID = 0L;
