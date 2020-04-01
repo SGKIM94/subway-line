@@ -1,7 +1,8 @@
 package atdd.station.docs;
 
 import atdd.AbstractDocumentationTest;
-import atdd.user.web.UserController;
+import atdd.path.application.dto.favorite.FavoriteCreateRequestView;
+import atdd.station.controller.FavoriteController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,22 +10,24 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.headers.RequestHeadersSnippet;
+import org.springframework.restdocs.payload.RequestFieldsSnippet;
+import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 
+import static atdd.path.fixture.FavoriteFixture.FAVORITE_ID;
+import static atdd.path.fixture.FavoriteFixture.STATION_FAVORITE_CREATE_REQUEST_VIEW;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(UserController.class)
+@WebMvcTest(FavoriteController.class)
 public class FavoriteDocumentationTest extends AbstractDocumentationTest {
     public static final String TEST_USER_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgxOTg1NjYzLCJleHAiOjE1ODE5ODkyNjN9.nL07LEhgTVzpUdQrOMbJq-oIce_idEdPS62hB2ou2hg";
-    public static final String USER_ID = "id";
-    public static final String USER_EMAIL = "email";
-    public static final String USER_PASSWORD = "password";
-    public static final String USER_NAME = "name";
-    public static final String USER_BASE_URL = "/users";
-    public static final String EMAIL_PATH = "$.email";
+    public static final String FAVORITE_BASE_URL = "/favorites";
 
     @MockBean
     private atdd.path.application.FavoriteService favoriteService;
@@ -39,20 +42,31 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
     @Test
     void create() throws Exception {
         //given
-        atdd.path.domain.Favorite favorite = NEW_FAVORITAE;
+        FavoriteCreateRequestView favorite = STATION_FAVORITE_CREATE_REQUEST_VIEW;
 
 
-        given(favoriteService.save(any())).willReturn(favorite);
+        given(favoriteService.save(any(), any())).willReturn(favorite);
 
        //when
-        this.mockMvc.perform(post(USER_BASE_URL)
-                .content(getContentWithView(createUserRequestView))
+        this.mockMvc.perform(post(FAVORITE_BASE_URL)
+                .content(getContentWithView(favorite))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andDo(document("users/create", getUserRequestFieldsSnippet(), getUserResponseFieldsSnippet()))
+                .andDo(document("favorites/create", getFavoriteRequestFieldsSnippet(), getFavoriteResponseFieldsSnippet()))
                 .andDo(print());
     }
 
+    private RequestFieldsSnippet getFavoriteRequestFieldsSnippet() {
+        return requestFields(
+                fieldsSnippet.writeNumberSnippetDescription(FAVORITE_ID, "favorite id")
+        );
+    }
+
+    private ResponseFieldsSnippet getFavoriteResponseFieldsSnippet() {
+        return responseFields(
+                fieldsSnippet.writeNumberSnippetDescription(FAVORITE_ID, "favorite id")
+        );
+    }
 
     private RequestHeadersSnippet getAuthorizationHeaderSnippet() {
         return fieldsSnippet.getAuthorizationHeaderSnippet("Bearer auth credentials");
