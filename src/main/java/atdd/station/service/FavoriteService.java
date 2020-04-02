@@ -1,25 +1,25 @@
 package atdd.path.application;
 
 import atdd.path.application.dto.favorite.FavoriteCreateRequestView;
-import atdd.path.application.dto.favorite.FavoriteCreateResponseView;
-import atdd.path.application.dto.favorite.FavoriteListResponseView;
-import atdd.path.dao.FavoriteDao;
 import atdd.path.domain.Favorite;
-import atdd.path.domain.User;
+import atdd.station.domain.FavoriteRepository;
+import atdd.station.domain.User;
+import atdd.station.dto.favorite.FavoriteCreateResponseView;
+import atdd.station.dto.favorite.FavoriteListResponseView;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static atdd.path.dao.FavoriteDao.EDGE_TYPE;
-import static atdd.path.dao.FavoriteDao.STATION_TYPE;
-
 @Service
 public class FavoriteService {
-    private FavoriteDao favoriteDao;
+    private static final String STATION_TYPE = "station";
+    private static final String EDGE_TYPE = "edge";
 
-    public FavoriteService(FavoriteDao favoriteDao) {
-        this.favoriteDao = favoriteDao;
+    private FavoriteRepository favoriteRepository;
+
+    public FavoriteService(FavoriteRepository favoriteRepository) {
+        this.favoriteRepository = favoriteRepository;
     }
 
     @Transactional
@@ -28,7 +28,7 @@ public class FavoriteService {
             favorite.getEdge().validateFavoriteEdge();
         }
 
-        return FavoriteCreateResponseView.toDtoEntity(favoriteDao.save(favorite.toEntity(loginUser), favorite.getType()));
+        return FavoriteCreateResponseView.toDtoEntity(favoriteRepository.save(favorite.toEntity(loginUser), favorite.getType()));
     }
 
     @Transactional(readOnly = true)
@@ -38,14 +38,14 @@ public class FavoriteService {
 
     @Transactional
     public void deleteItem(User loginUser, Long itemId) {
-        favoriteDao.deleteItem(loginUser, itemId);
+        favoriteRepository.delete(loginUser, itemId);
     }
 
     private List<Favorite> findStationByUserAndType(User loginUser, String type) {
         if (STATION_TYPE.equals(type)) {
-            return favoriteDao.findStationByUser(loginUser);
+            return favoriteRepository.findStationByUser(loginUser);
         }
 
-        return favoriteDao.findEdgeByUser(loginUser);
+        return favoriteRepository.findEdgeByUser(loginUser);
     }
 }
