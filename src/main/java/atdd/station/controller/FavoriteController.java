@@ -1,10 +1,10 @@
 package atdd.station.controller;
 
 import atdd.path.application.dto.favorite.FavoriteCreateRequestView;
-import atdd.path.application.dto.favorite.FavoriteCreateResponseView;
-import atdd.path.application.dto.favorite.FavoriteListResponseView;
-import atdd.path.domain.User;
-import atdd.path.security.LoginUser;
+import atdd.station.domain.User;
+import atdd.station.dto.favorite.FavoriteCreateResponseView;
+import atdd.station.dto.favorite.FavoriteListResponseView;
+import atdd.station.security.LoginUser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
