@@ -3,6 +3,7 @@ package atdd.station.domain;
 import lombok.Builder;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Edge {
@@ -84,5 +85,19 @@ public class Edge {
 
     public boolean isDeleted() {
         return deleted;
+    }
+
+
+    private void checkLineInStationHasOppositeStation(Station station, Station oppositeStation) {
+        List<Line> linesInStation = station.getLines();
+
+        if (linesInStation.isEmpty()) {
+            return;
+        }
+
+        linesInStation.stream()
+                .filter(line -> line.getStations().contains(oppositeStation))
+                .findFirst()
+                .orElseThrow(IllegalArgumentException::new);
     }
 }
