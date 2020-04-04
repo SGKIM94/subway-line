@@ -91,7 +91,8 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
 
     private RequestFieldsSnippet getFavoriteRequestFieldsSnippet() {
         return requestFields(
-                fieldsSnippet.writeNumberSnippetDescription(FAVORITE_ID, "favorite id")
+                fieldsSnippet.writeNumberSnippetDescription("id", "The favorite's id"),
+                fieldsSnippet.writeStringSnippetDescription("type", "The favorite`s type")
         );
     }
 
