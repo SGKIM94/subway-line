@@ -18,6 +18,8 @@ import static atdd.path.fixture.FavoriteFixture.STATION_FAVORITE_CREATE_REQUEST_
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -63,7 +65,7 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
         given(favoriteService.save(any(), any())).willReturn(FAVORITE_CREATE_RESPONSE_VIEW);
 
         //when
-        this.mockMvc.perform(post(FAVORITE_BASE_URL)
+        this.mockMvc.perform(get(FAVORITE_BASE_URL)
                 .content(getContentWithView(STATION_FAVORITE_CREATE_REQUEST_VIEW))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
@@ -78,7 +80,7 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
         given(favoriteService.save(any(), any())).willReturn(FAVORITE_CREATE_RESPONSE_VIEW);
 
         //when
-        this.mockMvc.perform(post(FAVORITE_BASE_URL)
+        this.mockMvc.perform(delete(FAVORITE_BASE_URL + FAVORITE_ID)
                 .content(getContentWithView(STATION_FAVORITE_CREATE_REQUEST_VIEW))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
