@@ -53,7 +53,8 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
                 .content(getContentWithView(favorite))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andDo(document("favorites/create", getFavoriteRequestFieldsSnippet(), getFavoriteResponseFieldsSnippet()))
+                .andDo(document("favorites/create", getAuthorizationHeaderSnippet(),
+                        getFavoriteRequestFieldsSnippet(), getFavoriteResponseFieldsSnippet()))
                 .andDo(print());
     }
 
@@ -68,7 +69,8 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
                 .content(getContentWithView(STATION_FAVORITE_CREATE_REQUEST_VIEW))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andDo(document("favorites/findByUser", getFavoriteRequestFieldsSnippet(), getFavoriteResponseFieldsSnippet()))
+                .andDo(document("favorites/findByUser", getAuthorizationHeaderSnippet(),
+                        getFavoriteRequestFieldsSnippet(), getFavoriteResponseFieldsSnippet()))
                 .andDo(print());
     }
 
@@ -83,7 +85,8 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
                 .content(getContentWithView(STATION_FAVORITE_CREATE_REQUEST_VIEW))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andDo(document("favorites/deleteItem", getFavoriteRequestFieldsSnippet(), getFavoriteResponseFieldsSnippet()))
+                .andDo(document("favorites/deleteItem", getAuthorizationHeaderSnippet(),
+                        getFavoriteRequestFieldsSnippet(), getFavoriteResponseFieldsSnippet()))
                 .andDo(print());
     }
 
