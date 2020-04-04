@@ -54,7 +54,7 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andDo(document("favorites/create", getAuthorizationHeaderSnippet(),
-                        getFavoriteRequestFieldsSnippet(), getFavoriteResponseFieldsSnippet()))
+                        getFavoriteUserFieldSnippet(), getFavoriteResponseFieldsSnippet()))
                 .andDo(print());
     }
 
@@ -70,7 +70,7 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andDo(document("favorites/findByUser", getAuthorizationHeaderSnippet(),
-                        getFavoriteRequestFieldsSnippet(), getFavoriteResponseFieldsSnippet()))
+                        getFavoriteUserFieldSnippet(), getFavoriteResponseFieldsSnippet()))
                 .andDo(print());
     }
 
@@ -103,6 +103,12 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
                 fieldsSnippet.writeNumberSnippetDescription(FAVORITE_SNIPPET_ID, "favorite id"),
                 fieldsSnippet.writeNumberSnippetDescription("user", "The favorite`s user")
                 fieldsSnippet.writeNumberSnippetDescription("item", "The favorite`s item")
+        );
+    }
+
+    private RequestFieldsSnippet getFavoriteUserFieldSnippet() {
+        return requestFields(
+                fieldsSnippet.writeNumberSnippetDescription("user", "The favorite's user")
         );
     }
 
