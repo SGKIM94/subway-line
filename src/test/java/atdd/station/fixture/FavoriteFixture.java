@@ -29,6 +29,10 @@ public class FavoriteFixture {
     public static final List<Favorite> NEW_STATION_FAVORITES = Arrays.asList(NEW_STATION_FAVORITE, NEW_SECOND_STATION_FAVORITE);
     public static final List<Favorite> NEW_EDGE_FAVORITES = Arrays.asList(NEW_EDGE_FAVORITE, NEW_SECOND_EDGE_FAVORITE);
 
+    public static final FavoriteCreateResponseView FAVORITE_CREATE_RESPONSE_VIEW
+            = new FavoriteCreateResponseView(FAVORITE_ID, FIRST_TEST_USER, TEST_EDGE);
+
+
     public static final FavoriteCreateRequestView STATION_FAVORITE_CREATE_REQUEST_VIEW
             = new FavoriteCreateRequestView(TEST_STATION, STATION_TYPE);
     public static final FavoriteCreateRequestView EDGE_FAVORITE_CREATE_REQUEST_VIEW

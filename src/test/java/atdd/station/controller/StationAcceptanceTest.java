@@ -1,6 +1,7 @@
 package atdd.station.controller;
 
 import atdd.station.domain.Station;
+import atdd.station.dto.station.StationDetailResponseDto;
 import atdd.station.dto.station.StationListResponseDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,12 +26,12 @@ public class StationAcceptanceTest extends atdd.path.AbstractAcceptanceTest {
     public static final String KANGNAM_STATION_JSON = "{\"name\": \"" + KANGNAM_STATION_NAME + "\"}";
     private static final String STATION_API_BASE_URL = "/stations/";
 
-    private RestWebClientTest restWebClientTest;
+    private atdd.path.web.RestWebClientTest restWebClientTest;
 
     @BeforeEach
     void setUp() {
         cleanAllDatabases();
-        this.restWebClientTest = new RestWebClientTest(this.webTestClient);
+        this.restWebClientTest = new atdd.path.web.RestWebClientTest(this.webTestClient);
     }
 
     @DisplayName("강남역_지하철_등록을_요청이_성공하는지")
