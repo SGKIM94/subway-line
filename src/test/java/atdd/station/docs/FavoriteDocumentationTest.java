@@ -69,7 +69,7 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
                 .content(getContentWithView(STATION_FAVORITE_CREATE_REQUEST_VIEW))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andDo(document("favorites/create", getFavoriteRequestFieldsSnippet(), getFavoriteResponseFieldsSnippet()))
+                .andDo(document("favorites/findByUser", getFavoriteRequestFieldsSnippet(), getFavoriteResponseFieldsSnippet()))
                 .andDo(print());
     }
 
@@ -84,7 +84,7 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
                 .content(getContentWithView(STATION_FAVORITE_CREATE_REQUEST_VIEW))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andDo(document("favorites/create", getFavoriteRequestFieldsSnippet(), getFavoriteResponseFieldsSnippet()))
+                .andDo(document("favorites/deleteItem", getFavoriteRequestFieldsSnippet(), getFavoriteResponseFieldsSnippet()))
                 .andDo(print());
     }
 
