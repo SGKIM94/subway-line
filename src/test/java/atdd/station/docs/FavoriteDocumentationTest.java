@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(FavoriteController.class)
 public class FavoriteDocumentationTest extends AbstractDocumentationTest {
-    public static final String TEST_USER_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29yd29uaWVAZW1haWwuY29tIiwiaWF0IjoxNTgxOTg1NjYzLCJleHAiOjE1ODE5ODkyNjN9.nL07LEhgTVzpUdQrOMbJq-oIce_idEdPS62hB2ou2hg";
+    public static final String FAVORITE_SNIPPET_ID = "id";
     public static final String FAVORITE_BASE_URL = "/favorites";
 
     @MockBean
