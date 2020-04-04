@@ -71,6 +71,22 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
                 .andDo(print());
     }
 
+    @DisplayName("사용자에 추가되어있는 Favorite 를 삭제하는 Docs 가 생성되는지")
+    @Test
+    void deleteItem() throws Exception {
+        //given
+        given(favoriteService.save(any(), any())).willReturn(FAVORITE_CREATE_RESPONSE_VIEW);
+
+        //when
+        this.mockMvc.perform(post(FAVORITE_BASE_URL)
+                .content(getContentWithView(STATION_FAVORITE_CREATE_REQUEST_VIEW))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andDo(document("favorites/create", getFavoriteRequestFieldsSnippet(), getFavoriteResponseFieldsSnippet()))
+                .andDo(print());
+    }
+
+
     private RequestFieldsSnippet getFavoriteRequestFieldsSnippet() {
         return requestFields(
                 fieldsSnippet.writeNumberSnippetDescription(FAVORITE_ID, "favorite id")
