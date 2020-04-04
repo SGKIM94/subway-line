@@ -3,6 +3,7 @@ package atdd.station.domain;
 import lombok.Builder;
 
 import javax.persistence.*;
+import javax.sound.sampled.Line;
 import java.util.List;
 
 @Entity
@@ -87,6 +88,15 @@ public class Edge {
         return deleted;
     }
 
+    public void validateFavoriteEdge() {
+        checkBidirectionalSourceAndTarget();
+        checkSourceAndTargetStationIsSameWhenEdge();
+    }
+
+    public void checkBidirectionalSourceAndTarget() {
+        checkLineInStationHasOppositeStation(getSourceStation(), getTargetStation());
+        checkLineInStationHasOppositeStation(getTargetStation(), getSourceStation());
+    }
 
     private void checkLineInStationHasOppositeStation(Station station, Station oppositeStation) {
         List<Line> linesInStation = station.getLines();
