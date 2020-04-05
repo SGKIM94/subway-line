@@ -14,6 +14,10 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 
 public class FieldsSnippet {
+    FieldDescriptor getUserFieldSnippet() {
+        return writeNumberSnippetDescription("user", "The favorite`s user");
+    }
+
     private RestDocumentationResultHandler writeResultDocument(String identifier
             , RequestFieldsSnippet requestFieldsSnippet, ResponseFieldsSnippet responseFieldsSnippet) {
         return document(identifier, requestFieldsSnippet, responseFieldsSnippet);
