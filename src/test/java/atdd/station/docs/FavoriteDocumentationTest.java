@@ -10,7 +10,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.headers.RequestHeadersSnippet;
-import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 
@@ -103,18 +102,14 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
     private ResponseFieldsSnippet getFavoriteResponseFieldsSnippet() {
         return responseFields(
                 fieldsSnippet.writeNumberSnippetDescription(FAVORITE_SNIPPET_ID, "favorite id"),
-                getUserFieldSnippet(),
+                fieldsSnippet.getUserFieldSnippet(),
                 fieldsSnippet.writeNumberSnippetDescription("item", "The favorite`s item")
         );
     }
 
-    private FieldDescriptor getUserFieldSnippet() {
-        return fieldsSnippet.writeNumberSnippetDescription("user", "The favorite`s user");
-    }
-
     private RequestFieldsSnippet getFavoriteUserFieldSnippet() {
         return requestFields(
-                getUserFieldSnippet()
+                fieldsSnippet.getUserFieldSnippet()
         );
     }
 
