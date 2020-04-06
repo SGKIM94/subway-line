@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 public class FavoriteService {
     private static final String STATION_TYPE = "station";
-    private static final String EDGE_TYPE = "edge";
+    public static final String EDGE_TYPE = "edge";
 
     private FavoriteRepository favoriteRepository;
 
