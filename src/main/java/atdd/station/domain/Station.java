@@ -10,7 +10,7 @@ import java.util.List;
 
 @Entity
 @NoArgsConstructor
-public class Station {
+public class Station extends Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
