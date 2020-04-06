@@ -7,7 +7,7 @@ import javax.sound.sampled.Line;
 import java.util.List;
 
 @Entity
-public class Edge {
+public class Edge extends Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
