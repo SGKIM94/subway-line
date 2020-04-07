@@ -46,7 +46,6 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
         //given
         FavoriteCreateRequestView favorite = STATION_FAVORITE_CREATE_REQUEST_VIEW;
 
-
         given(favoriteService.save(any(), any())).willReturn(favorite);
 
        //when
@@ -87,7 +86,12 @@ public class FavoriteDocumentationTest extends AbstractDocumentationTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andDo(document("favorites/deleteItem", getAuthorizationHeaderSnippet(),
-                        getFavoriteRequestFieldsSnippet(), getFavoriteResponseFieldsSnippet()))
+                        getFavoriteRequestFieldsSnippet(),
+                        responseFields(
+                fieldsSnippet.writeNumberSnippetDescription(FAVORITE_SNIPPET_ID, "favorite id"),
+                fieldsSnippet.getUserFieldSnippet(),
+                fieldsSnippet.writeNumberSnippetDescription("item", "The favorite`s item")
+        )))
                 .andDo(print());
     }
 
